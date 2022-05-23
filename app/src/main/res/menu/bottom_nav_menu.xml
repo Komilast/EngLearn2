@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bnb_home"
+        android:title="@string/bnb_home_title"
+        android:enabled="true"
+        android:icon="@drawable/home_icon"/>
+
+    <item
+        android:id="@+id/bnb_library"
+        android:title="@string/bnb_library_title"
+        android:enabled="true"
+        android:icon="@drawable/library_icon"/>
+
+    <item
+        android:id="@+id/bnb_menu"
+        android:title="@string/bnb_menu_title"
+        android:enabled="true"
+        android:icon="@drawable/menu_icon"/>
+
+</menu>
