@@ -16,13 +16,14 @@
         app:menu="@menu/bottom_nav_menu"
         android:background="@drawable/bnb_bg_rounded_corners"
         android:layout_marginHorizontal="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="7dp"
         app:itemTextColor="@color/bnb_state_color"
-        app:itemIconTint="@color/bnb_state_color"/>
+        app:itemIconTint="@color/bnb_state_color"
+        app:itemIconSize="30dp"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="ru.guru.englearn2.View.Fragments.LibraryFragment"
+        android:name="ru.guru.englearn2.View.Fragments.MainFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

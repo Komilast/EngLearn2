@@ -3,4 +3,6 @@
     <string name="bnb_home_title">Главная</string>
     <string name="bnb_library_title">Библиотека</string>
     <string name="bnb_menu_title">Меню</string>
+    <string name="bnb_profile_title">Профиль</string>
+    <string name="bnb_statistic_title">Статистика</string>
 </resources>
