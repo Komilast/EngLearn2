@@ -1,4 +1,4 @@
-package ru.guru.exceltorealm
+package ru.guru.englearn2.Model
 
 import io.realm.RealmList
 import io.realm.RealmObject

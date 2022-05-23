@@ -14,6 +14,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        binding.apply {
+
+        }
+
+
         return binding.root
     }
 
