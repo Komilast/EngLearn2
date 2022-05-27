@@ -33,5 +33,6 @@ open class Word(
     @Ignore
     var type: String? = null,
     var links: RealmList<Word>? = null,
-    var temp: String? = null
+    var temp: String? = null,
+    var isFavorite: Boolean = false
 ): RealmObject()

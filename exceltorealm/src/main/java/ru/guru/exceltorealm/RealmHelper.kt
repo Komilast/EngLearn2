@@ -41,6 +41,7 @@ class RealmHelper(private val context: Context) {
                         if (mWord.cells[4] != "-") word.temp = mWord.cells[4]
                         word.number = lesson.words.indexOf(word)
                         word.lesson = lesson
+                        word.isFavorite = false
                     }
                 }
             }

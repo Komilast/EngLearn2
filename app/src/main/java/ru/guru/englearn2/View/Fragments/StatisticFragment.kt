@@ -1,6 +1,7 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,4 +18,9 @@ class StatisticFragment : Fragment(R.layout.fragment_statistic) {
         return binding.root
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("My", "Finish")
+    }
 }

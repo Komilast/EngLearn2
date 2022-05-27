@@ -1,5 +1,6 @@
 package ru.guru.englearn2.View.Adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -27,5 +28,11 @@ class TopicAdapter(
 
         override fun getItemCount(): Int {
             return data.size
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        fun setData(data: ArrayList<Topic>){
+            this.data = data
+            notifyDataSetChanged()
         }
 }
