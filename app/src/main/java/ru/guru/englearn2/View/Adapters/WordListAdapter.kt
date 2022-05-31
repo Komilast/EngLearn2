@@ -13,10 +13,13 @@ import ru.guru.englearn2.View.Interfaces.OnWordClickListener
 class WordListAdapter(
     private val context: Context,
     private var data: ArrayList<Word>,
-    private val listener: OnWordClickListener
-) : RecyclerView.Adapter<WordListHolder>(){
+    private val listener: OnWordClickListener,
+    private val mode: Int
+) : RecyclerView.Adapter<WordListHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordListHolder {
-        return WordListHolder(LayoutInflater.from(context).inflate(R.layout.item_word, parent, false))
+        return WordListHolder(
+            LayoutInflater.from(context).inflate(R.layout.item_word, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: WordListHolder, position: Int) {
@@ -28,7 +31,7 @@ class WordListAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setData(data: ArrayList<Word>){
+    fun setData(data: ArrayList<Word>) {
         this.data = data
         notifyDataSetChanged()
     }

@@ -3,13 +3,11 @@ package ru.guru.englearn2.View.Activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Fragments.*
-import ru.guru.englearn2.View.Interfaces.StartFragment
 import ru.guru.englearn2.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), StartFragment {
+class MainActivity : AppCompatActivity() {
 
     companion object {
         val checkBackStackForBNB = ArrayList<Int>()
@@ -21,7 +19,6 @@ class MainActivity : AppCompatActivity(), StartFragment {
     private val menuFragment = MenuFragment()
     private val statisticFragment = StatisticFragment()
     private val profileFragment = ProfileFragment()
-    private val wordListFragment = WordListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,16 +90,5 @@ class MainActivity : AppCompatActivity(), StartFragment {
             binding.bnb.menu.getItem(checkBackStackForBNB.get(checkBackStackForBNB.count() - 2)).isChecked = true
             checkBackStackForBNB.removeAt(checkBackStackForBNB.count() - 1)
         }
-    }
-
-    override fun startWordList(lesson: Lesson) {
-        val params = Bundle()
-        params.putInt("idLesson", lesson.id!!)
-        wordListFragment.arguments = params
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, wordListFragment)
-            .addToBackStack(null)
-            .commit()
-        checkBackStackForBNB.add(1)
     }
 }

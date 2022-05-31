@@ -36,3 +36,7 @@ open class Word(
     var temp: String? = null,
     var isFavorite: Boolean = false
 ): RealmObject()
+
+open class Menu(
+    var favWords: RealmList<Word>? = null
+) : RealmObject()

@@ -3,9 +3,11 @@ package ru.guru.englearn2.View.Fragments
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -31,23 +33,17 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private var viewModel: WordListVM? = null
     private var idLesson: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            idLesson = it.getInt("idLesson", 0)
-        }
-    }
-
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = runBlocking{
         binding = FragmentWordlistBinding.inflate(inflater)
+        idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
-        adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment)
+        adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment, idLesson)
 
         launch {
             viewModel = ViewModelProvider(this@WordListFragment)[WordListVM::class.java]
-            words = viewModel!!.getAllWordsByLesson(idLesson)
-            words!!.observe(this@WordListFragment){
+            words = viewModel!!.getAllWords(idLesson)
+            words!!.observe(this@WordListFragment) {
                 adapter.setData(words!!.value!!)
             }
         }
@@ -56,7 +52,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             recycler.adapter = adapter
             recycler.layoutManager = LinearLayoutManager(requireContext())
         }
-
+        Log.d("My", "onCreateView")
         return@runBlocking binding.root
     }
 
@@ -64,7 +60,13 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         val popupMenu = PopupMenu(requireContext(), view)
         popupMenu.menuInflater.inflate(R.menu.wordlist_word_more_menu, popupMenu.menu)
         if (word.isFavorite) popupMenu.menu.getItem(0).title = "Удалить из избранного"
-
+        popupMenu.setOnMenuItemClickListener {
+            when(it.title){
+                "Добавить в избранное", "Удалить из избранного" -> viewModel!!.wordFav(word)
+            }
+            return@setOnMenuItemClickListener true
+        }
+        popupMenu.show()
     }
 
     override fun onSpeakClick(word: Word) {

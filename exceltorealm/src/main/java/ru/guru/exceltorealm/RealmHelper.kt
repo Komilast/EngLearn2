@@ -3,6 +3,7 @@ package ru.guru.exceltorealm
 import android.content.Context
 import io.realm.Realm
 import io.realm.RealmList
+import io.realm.kotlin.createObject
 import io.realm.kotlin.executeTransactionAwait
 import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +55,8 @@ class RealmHelper(private val context: Context) {
                     word.temp = null
                     }
             }
+            val menu = it.createObject(Menu::class.java)
+            menu.favWords = RealmList()
         }
 
     }
