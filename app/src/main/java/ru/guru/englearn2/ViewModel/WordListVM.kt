@@ -14,32 +14,30 @@ class WordListVM : ViewModel() {
 
     private val realm = Realm.getDefaultInstance()
 
-    private var words: LiveData<ArrayList<Word>>? = null
-    private var wordsFav: LiveData<ArrayList<Word>>? = null
-    private var wordsDel: LiveData<ArrayList<Word>>? = null
+    private var words: LiveData<RealmList<Word>>? = null
+    private var wordsFav: LiveData<RealmList<Word>>? = null
+    private var wordsDel: LiveData<RealmList<Word>>? = null
 
-    fun getAllWords(idLesson: Int, listener: RealmChangeListener<RealmList<Word>>): LiveData<ArrayList<Word>>? {
+    fun getAllWords(idLesson: Int, listener: RealmChangeListener<RealmList<Word>>): LiveData<RealmList<Word>>? {
         when {
             idLesson >= 0 -> {
-                val wordList = realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
+//                mWords = realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
                 if (words == null) {
-                    words = MutableLiveData(ArrayList(wordList))
+                    words = MutableLiveData(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words)
                 }
                 return words
             }
             idLesson == -1 -> {
-                val wordList = realm.where(Menu::class.java).findFirst()!!.favWords!!
-                wordList.addChangeListener(listener)
+//                mWordsFav = realm.where(Menu::class.java).findFirst()!!.favWords!!
                 if (wordsFav == null) {
-                    wordsFav = MutableLiveData(ArrayList(wordList))
+                    wordsFav = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.favWords!!)
                 }
                 return wordsFav
             }
             idLesson == -2 -> {
-                val wordList = realm.where(Menu::class.java).findFirst()!!.delWords!!
-                wordList.addChangeListener(listener)
+//                mWordsDel = realm.where(Menu::class.java).findFirst()!!.delWords!!
                 if (wordsDel == null) {
-                    wordsDel = MutableLiveData(ArrayList(wordList))
+                    wordsDel = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.delWords!!)
                 }
                 return wordsDel
             }

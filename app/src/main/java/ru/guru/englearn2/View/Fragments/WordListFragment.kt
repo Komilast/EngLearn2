@@ -31,7 +31,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private lateinit var binding: FragmentWordlistBinding
     private lateinit var adapter: WordListAdapter
     private lateinit var textToSpeech: TextToSpeech
-    private var words: LiveData<ArrayList<Word>>? = null
+    private var words: LiveData<RealmList<Word>>? = null
     private var viewModel: WordListVM? = null
     private var idLesson: Int = 0
 
@@ -46,8 +46,9 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             viewModel = ViewModelProvider(this@WordListFragment)[WordListVM::class.java]
             words = viewModel!!.getAllWords(idLesson, this@WordListFragment)
             words!!.observe(this@WordListFragment) {
-                adapter.setData(words!!.value!!)
+                adapter.setData(ArrayList(words!!.value!!))
             }
+            words!!.value!!.addChangeListener(this@WordListFragment)
         }
 
         binding.apply {
