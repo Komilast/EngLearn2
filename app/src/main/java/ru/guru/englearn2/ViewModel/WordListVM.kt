@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModel
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmList
-import io.realm.kotlin.where
-import ru.guru.englearn.database.LiveRealmObject
-import ru.guru.englearn.database.LiveRealmResults
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Menu
 import ru.guru.englearn2.Model.Word
@@ -25,7 +22,6 @@ class WordListVM : ViewModel() {
         when {
             idLesson >= 0 -> {
                 val wordList = realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
-                wordList.addChangeListener(listener)
                 if (words == null) {
                     words = MutableLiveData(ArrayList(wordList))
                 }
