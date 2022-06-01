@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/wlwmm_favorite"
-        android:title="Добавить в избранное" />
     <item
         android:id="@+id/wlwmm_delete"
         android:title="Удалить"/>
-
+    <item android:id="@+id/wlwmm_restore"
+        android:title="Восстановить"/>
 </menu>

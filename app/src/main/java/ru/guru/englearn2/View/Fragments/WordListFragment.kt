@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.realm.RealmChangeListener
+import io.realm.RealmList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.guru.englearn2.Model.Word
@@ -24,7 +26,7 @@ import ru.guru.englearn2.databinding.FragmentWordlistBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener {
+class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener, RealmChangeListener<RealmList<Word>> {
 
     private lateinit var binding: FragmentWordlistBinding
     private lateinit var adapter: WordListAdapter
@@ -42,7 +44,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
 
         launch {
             viewModel = ViewModelProvider(this@WordListFragment)[WordListVM::class.java]
-            words = viewModel!!.getAllWords(idLesson)
+            words = viewModel!!.getAllWords(idLesson, this@WordListFragment)
             words!!.observe(this@WordListFragment) {
                 adapter.setData(words!!.value!!)
             }
@@ -58,11 +60,17 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
 
     override fun onMoreClick(view: View, word: Word) {
         val popupMenu = PopupMenu(requireContext(), view)
-        popupMenu.menuInflater.inflate(R.menu.wordlist_word_more_menu, popupMenu.menu)
-        if (word.isFavorite) popupMenu.menu.getItem(0).title = "Удалить из избранного"
+        when {
+            idLesson >= 0 -> popupMenu.menuInflater.inflate(R.menu.wordlist_word_more_menu, popupMenu.menu)
+            idLesson == -1 -> popupMenu.menuInflater.inflate(R.menu.wordlist_word_more_menu, popupMenu.menu)
+            idLesson == -2 -> popupMenu.menuInflater.inflate(R.menu.del_words_menu, popupMenu.menu)
+        }
+        if (word.isFavorite && idLesson != -2) popupMenu.menu.getItem(0).title = "Удалить из избранного"
         popupMenu.setOnMenuItemClickListener {
             when(it.title){
                 "Добавить в избранное", "Удалить из избранного" -> viewModel!!.wordFav(word)
+                "Удалить" -> viewModel!!.deleteWord(idLesson, word)
+                "Восстановить" -> viewModel!!.restoreWord(word)
             }
             return@setOnMenuItemClickListener true
         }
@@ -77,6 +85,11 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         if (status == TextToSpeech.SUCCESS){
             textToSpeech.language = Locale.US
         }
+    }
+
+    override fun onChange(t: RealmList<Word>) {
+        adapter.setData(ArrayList(t))
+        Log.d("My", "onChange")
     }
 
 }

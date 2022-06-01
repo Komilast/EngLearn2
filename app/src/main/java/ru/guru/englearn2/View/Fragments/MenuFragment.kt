@@ -19,9 +19,14 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
         binding = FragmentMenuBinding.inflate(inflater, container, false)
 
         binding.apply {
-            favWord.setOnClickListener {
+            fav.setOnClickListener {
                 val intent = Intent(requireContext(), WordListActivity::class.java)
                 intent.putExtra("idLesson", -1)
+                startActivity(intent)
+            }
+            del.setOnClickListener {
+                val intent = Intent(requireContext(), WordListActivity::class.java)
+                intent.putExtra("idLesson", -2)
                 startActivity(intent)
             }
         }
