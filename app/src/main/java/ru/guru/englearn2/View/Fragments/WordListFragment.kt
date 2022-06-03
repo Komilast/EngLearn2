@@ -26,7 +26,7 @@ import ru.guru.englearn2.databinding.FragmentWordlistBinding
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener {
+class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener, RealmChangeListener<RealmList<Word>> {
 
     private lateinit var binding: FragmentWordlistBinding
     private lateinit var adapter: WordListAdapter
@@ -48,6 +48,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             words!!.observe(this@WordListFragment) {
                 adapter.setData(ArrayList(words!!.value!!))
             }
+            words!!.value!!.addChangeListener(this@WordListFragment)
         }
 
         binding.apply {
@@ -85,6 +86,10 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         if (status == TextToSpeech.SUCCESS){
             textToSpeech.language = Locale.US
         }
+    }
+
+    override fun onChange(t: RealmList<Word>) {
+        adapter.setData(ArrayList(t))
     }
 
 }
