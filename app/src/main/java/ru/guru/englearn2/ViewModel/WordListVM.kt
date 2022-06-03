@@ -18,24 +18,21 @@ class WordListVM : ViewModel() {
     private var wordsFav: LiveData<RealmList<Word>>? = null
     private var wordsDel: LiveData<RealmList<Word>>? = null
 
-    fun getAllWords(idLesson: Int, listener: RealmChangeListener<RealmList<Word>>): LiveData<RealmList<Word>>? {
+    fun getAllWords(idLesson: Int): LiveData<RealmList<Word>>? {
         when {
             idLesson >= 0 -> {
-//                mWords = realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
                 if (words == null) {
                     words = MutableLiveData(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words)
                 }
                 return words
             }
             idLesson == -1 -> {
-//                mWordsFav = realm.where(Menu::class.java).findFirst()!!.favWords!!
                 if (wordsFav == null) {
                     wordsFav = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.favWords!!)
                 }
                 return wordsFav
             }
             idLesson == -2 -> {
-//                mWordsDel = realm.where(Menu::class.java).findFirst()!!.delWords!!
                 if (wordsDel == null) {
                     wordsDel = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.delWords!!)
                 }
@@ -77,7 +74,8 @@ class WordListVM : ViewModel() {
 
     fun restoreWord(word: Word){
         realm.executeTransaction {
-            word.lesson!!.words.add(word.number, word)
+            word.lesson!!.words.add(word)
+            word.lesson!!.words.sortBy { it.number }
             it.where(Menu::class.java).findFirst()!!.delWords!!.remove(word)
             if (word.isFavorite) it.where(Menu::class.java).findFirst()!!.favWords!!.add(word)
         }
