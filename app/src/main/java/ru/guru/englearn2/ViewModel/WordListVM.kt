@@ -1,5 +1,6 @@
 package ru.guru.englearn2.ViewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,8 +48,12 @@ class WordListVM : ViewModel() {
     fun wordFav(word: Word) {
         realm.executeTransaction {
             val favWords = it.where(Menu::class.java).findFirst()!!.favWords!!
-            if (word.isFavorite != -1) {
-                word.isFavorite = favWords.max("isFavorite")!!.toInt() + 1
+            if (word.isFavorite == -1) {
+                var maxPosFav = favWords.max("isFavorite")?.toInt()
+                Log.d("My", maxPosFav?.toInt().toString())
+                if (maxPosFav == null) maxPosFav = -1
+                maxPosFav++
+                word.isFavorite = maxPosFav
                 favWords.add(word)
 
             } else {
