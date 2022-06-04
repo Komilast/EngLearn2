@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EngLearn2">
         <activity
+            android:name=".View.Activities.AAEWActivity"
+            android:exported="false" />
+        <activity
             android:name=".View.Activities.WordListActivity"
             android:exported="false" />
         <activity

@@ -22,7 +22,9 @@ class WordListVM : ViewModel() {
         when {
             idLesson >= 0 -> {
                 if (words == null) {
-                    words = MutableLiveData(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words)
+                    words = MutableLiveData(
+                        realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
+                    )
                 }
                 return words
             }
@@ -38,7 +40,9 @@ class WordListVM : ViewModel() {
                 }
                 return wordsDel
             }
-            else -> {return null}
+            else -> {
+                return null
+            }
         }
     }
 
@@ -56,23 +60,22 @@ class WordListVM : ViewModel() {
         }
     }
 
-    fun deleteWord(idLesson: Int, word: Word){
+    fun deleteWord(idLesson: Int, word: Word) {
         val menu = realm.where(Menu::class.java).findFirst()!!
         val delWords = menu.delWords!!
-        if (idLesson >= 0){
-            realm.executeTransaction {
-                delWords.add(word)
-                word.lesson!!.words.remove(word)
-                it.where(Menu::class.java).findFirst()!!.favWords!!.remove(word)
-            }
-        } else{
-            realm.executeTransaction{
-                delWords.deleteFromRealm(delWords.indexOf(word))
+        realm.executeTransaction {
+            when {
+                idLesson >= 0 || idLesson == -1 -> {
+                    delWords.add(word)
+                    word.lesson!!.words.remove(word)
+                    it.where(Menu::class.java).findFirst()!!.favWords!!.remove(word)
+                }
+                idLesson == -2 -> delWords.deleteFromRealm(delWords.indexOf(word))
             }
         }
     }
 
-    fun restoreWord(word: Word){
+    fun restoreWord(word: Word) {
         realm.executeTransaction {
             word.lesson!!.words.add(word)
             word.lesson!!.words.sortBy { it.number }

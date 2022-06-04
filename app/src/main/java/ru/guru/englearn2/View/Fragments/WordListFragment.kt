@@ -1,6 +1,7 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.guru.englearn2.Model.Word
 import ru.guru.englearn2.R
+import ru.guru.englearn2.View.Activities.AAEWActivity
 import ru.guru.englearn2.View.Adapters.WordListAdapter
 import ru.guru.englearn2.View.Interfaces.OnWordClickListener
 import ru.guru.englearn2.ViewModel.WordListVM
@@ -72,6 +74,12 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 "Добавить в избранное", "Удалить из избранного" -> viewModel!!.wordFav(word)
                 "Удалить" -> viewModel!!.deleteWord(idLesson, word)
                 "Восстановить" -> viewModel!!.restoreWord(word)
+                "Редактировать" -> {
+                    val intent = Intent(requireContext(), AAEWActivity::class.java)
+                    intent.putExtra("idWord", word.id)
+                    intent.putExtra("idLesson", idLesson)
+                    startActivity(intent)
+                }
             }
             return@setOnMenuItemClickListener true
         }
