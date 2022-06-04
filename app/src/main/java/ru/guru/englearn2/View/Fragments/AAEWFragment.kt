@@ -100,7 +100,11 @@ class AAEWFragment : Fragment(R.layout.fragment_aaew) {
                 }
             }
 
-
+            cancel.setOnClickListener {
+                val intent = Intent(requireContext(), WordListActivity::class.java)
+                intent.putExtra("idLesson", idLesson)
+                startActivity(intent)
+            }
         }
 
         return binding.root
