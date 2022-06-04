@@ -22,9 +22,7 @@ class WordListVM : ViewModel() {
         when {
             idLesson >= 0 -> {
                 if (words == null) {
-                    words = MutableLiveData(
-                        realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words
-                    )
+                    words = MutableLiveData(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!.words)
                 }
                 return words
             }
@@ -49,13 +47,13 @@ class WordListVM : ViewModel() {
     fun wordFav(word: Word) {
         realm.executeTransaction {
             val favWords = it.where(Menu::class.java).findFirst()!!.favWords!!
-            if (!word.isFavorite) {
-                word.isFavorite = true
+            if (word.isFavorite != -1) {
+                word.isFavorite = favWords.max("isFavorite")!!.toInt() + 1
                 favWords.add(word)
 
             } else {
                 favWords.remove(word)
-                word.isFavorite = false
+                word.isFavorite = -1
             }
         }
     }
@@ -80,7 +78,8 @@ class WordListVM : ViewModel() {
             word.lesson!!.words.add(word)
             word.lesson!!.words.sortBy { it.number }
             it.where(Menu::class.java).findFirst()!!.delWords!!.remove(word)
-            if (word.isFavorite) it.where(Menu::class.java).findFirst()!!.favWords!!.add(word)
+            if (word.isFavorite != -1) it.where(Menu::class.java).findFirst()!!.favWords!!.add(word)
+            it.where(Menu::class.java).findFirst()!!.favWords!!.sortBy { it.isFavorite }
         }
     }
 

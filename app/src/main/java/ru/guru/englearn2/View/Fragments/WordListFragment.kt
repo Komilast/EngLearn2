@@ -68,7 +68,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             idLesson == -1 -> popupMenu.menuInflater.inflate(R.menu.wordlist_word_more_menu, popupMenu.menu)
             idLesson == -2 -> popupMenu.menuInflater.inflate(R.menu.del_words_menu, popupMenu.menu)
         }
-        if (word.isFavorite && idLesson != -2) popupMenu.menu.getItem(0).title = "Удалить из избранного"
+        if (word.isFavorite != -1 && idLesson != -2) popupMenu.menu.getItem(0).title = "Удалить из избранного"
         popupMenu.setOnMenuItemClickListener {
             when(it.title){
                 "Добавить в избранное", "Удалить из избранного" -> viewModel!!.wordFav(word)
