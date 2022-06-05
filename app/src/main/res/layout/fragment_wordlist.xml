@@ -19,7 +19,10 @@
             app:toolbarId="@+id/toolbar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
-            >
+            app:title="title"
+            app:expandedTitleTextAppearance="@style/collapse"
+            app:collapsedTitleTextAppearance="@style/collapse_2"
+            app:scrimAnimationDuration="250">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -33,7 +36,6 @@
                 android:id="@+id/toolbar"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_width="match_parent"
-                app:title="title"
                 app:layout_collapseMode="pin">
 
                 <androidx.appcompat.widget.AppCompatImageButton

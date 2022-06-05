@@ -58,11 +58,11 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             words!!.value!!.addChangeListener(this@WordListFragment)
             lesson!!.observe(this@WordListFragment) {
                 lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
-                toolbar.title = it.title
+                head.title = it.title
                 Log.d("My", it.title)
             }
             lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${lesson!!.value!!.title}.png"), lesson!!.value!!.title))
-            toolbar.title = lesson!!.value!!.title
+            head.title = lesson!!.value!!.title
             Log.d("My", lesson!!.value!!.title)
         }
             recycler.adapter = adapter
