@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.kotlin.where
+import ru.guru.englearn.database.LiveRealmObject
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Menu
 import ru.guru.englearn2.Model.Word
@@ -18,6 +21,7 @@ class WordListVM : ViewModel() {
     private var words: LiveData<RealmList<Word>>? = null
     private var wordsFav: LiveData<RealmList<Word>>? = null
     private var wordsDel: LiveData<RealmList<Word>>? = null
+    private var lesson: LiveRealmObject<Lesson>? = null
 
     fun getAllWords(idLesson: Int): LiveData<RealmList<Word>>? {
         when {
@@ -44,6 +48,13 @@ class WordListVM : ViewModel() {
             }
         }
     }
+
+    fun getLesson(idLesson: Int): LiveRealmObject<Lesson>? {
+        lesson = LiveRealmObject(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!)
+        return lesson
+    }
+
+
 
     fun wordFav(word: Word) {
         realm.executeTransaction {

@@ -14,7 +14,7 @@ class LessonHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(lesson: Lesson, context: Context, listener: onLessonClickListener) = with(binding){
         title.text = lesson.title
-        image.setImageDrawable(Drawable.createFromStream(context.assets.open("images/" + lesson.title + ".png"), lesson.title))
+        image.setImageDrawable(Drawable.createFromStream(context.assets.open("images/${lesson.title}.png"), lesson.title))
         container.setOnClickListener {
             listener.onClick(lesson)
         }

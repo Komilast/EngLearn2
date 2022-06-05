@@ -2,12 +2,11 @@ package ru.guru.englearn2.View.Fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -18,6 +17,8 @@ import io.realm.RealmChangeListener
 import io.realm.RealmList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.guru.englearn.database.LiveRealmObject
+import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Word
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.AAEWActivity
@@ -36,6 +37,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private var words: LiveData<RealmList<Word>>? = null
     private var viewModel: WordListVM? = null
     private var idLesson: Int = 0
+    private var lesson: LiveRealmObject<Lesson>? = null
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = runBlocking{
@@ -44,22 +46,45 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
         adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment, idLesson)
 
+        binding.apply {
+
         launch {
             viewModel = ViewModelProvider(this@WordListFragment)[WordListVM::class.java]
+            lesson = viewModel!!.getLesson(idLesson)
             words = viewModel!!.getAllWords(idLesson)
             words!!.observe(this@WordListFragment) {
                 adapter.setData(ArrayList(words!!.value!!))
             }
             words!!.value!!.addChangeListener(this@WordListFragment)
+            lesson!!.observe(this@WordListFragment) {
+                lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
+                toolbar.title = it.title
+                Log.d("My", it.title)
+            }
+            lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${lesson!!.value!!.title}.png"), lesson!!.value!!.title))
+            toolbar.title = lesson!!.value!!.title
+            Log.d("My", lesson!!.value!!.title)
         }
-
-        binding.apply {
             recycler.adapter = adapter
             recycler.layoutManager = LinearLayoutManager(requireContext())
+
+            lessonMore.setOnClickListener {
+                val popupMenu = PopupMenu(requireContext(), lessonMore)
+                popupMenu.menuInflater.inflate(R.menu.lesson_menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.title){
+                        "Редактировать урок" -> {Toast.makeText(requireContext(), "1", Toast.LENGTH_SHORT).show()
+                        return@setOnMenuItemClickListener true}
+                        else -> {return@setOnMenuItemClickListener false}
+                    }
+                }
+                popupMenu.show()
+            }
         }
         Log.d("My", "onCreateView")
         return@runBlocking binding.root
     }
+
 
     override fun onMoreClick(view: View, word: Word) {
         val popupMenu = PopupMenu(requireContext(), view)
