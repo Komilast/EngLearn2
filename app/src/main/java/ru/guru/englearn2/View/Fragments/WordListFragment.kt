@@ -58,18 +58,29 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 adapter.setData(ArrayList(words!!.value!!))
             }
             words!!.value!!.addChangeListener(this@WordListFragment)
-            lesson!!.observe(this@WordListFragment) {
+            lesson?.observe(this@WordListFragment) {
                 lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
                 head.title = it.title
                 Log.d("My", it.title)
             }
-//            lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${lesson!!.value!!.title}.png"), lesson!!.value!!.title))
-            lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
-            head.title = lesson!!.value!!.title
-            Log.d("My", lesson!!.value!!.title)
+
+            when {
+                idLesson >= 0 -> {
+                    lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
+                    head.title = lesson!!.value!!.title
+                }
+                idLesson == -1 -> {
+                    head.title = "Избранное"
+                }
+                idLesson == -2 -> {
+                    head.title = "Удалённое"
+                }
+            }
         }
             recycler.adapter = adapter
             recycler.layoutManager = LinearLayoutManager(requireContext())
+
+            if (idLesson < 0) lessonMore.visibility = View.GONE
 
             lessonMore.setOnClickListener {
                 val popupMenu = PopupMenu(requireContext(), lessonMore)
