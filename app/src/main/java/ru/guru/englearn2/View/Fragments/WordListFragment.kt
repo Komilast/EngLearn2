@@ -22,10 +22,12 @@ import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Word
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.AAEWActivity
+import ru.guru.englearn2.View.Activities.EAALActivity
 import ru.guru.englearn2.View.Adapters.WordListAdapter
 import ru.guru.englearn2.View.Interfaces.OnWordClickListener
 import ru.guru.englearn2.ViewModel.WordListVM
 import ru.guru.englearn2.databinding.FragmentWordlistBinding
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,7 +63,8 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 head.title = it.title
                 Log.d("My", it.title)
             }
-            lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${lesson!!.value!!.title}.png"), lesson!!.value!!.title))
+//            lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${lesson!!.value!!.title}.png"), lesson!!.value!!.title))
+            lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
             head.title = lesson!!.value!!.title
             Log.d("My", lesson!!.value!!.title)
         }
@@ -73,8 +76,12 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 popupMenu.menuInflater.inflate(R.menu.lesson_menu, popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener {
                     when (it.title){
-                        "Редактировать урок" -> {Toast.makeText(requireContext(), "1", Toast.LENGTH_SHORT).show()
-                        return@setOnMenuItemClickListener true}
+                        "Редактировать урок" -> {
+                            val intent = Intent(requireContext(), EAALActivity::class.java)
+                            intent.putExtra("idLesson", idLesson)
+                            startActivity(intent)
+                            return@setOnMenuItemClickListener true
+                        }
                         else -> {return@setOnMenuItemClickListener false}
                     }
                 }
