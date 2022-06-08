@@ -10,7 +10,7 @@ import ru.guru.englearn2.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        val checkBackStackForBNB = ArrayList<Int>()
+        var checkBackStackForBNB = 0
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -19,16 +19,36 @@ class MainActivity : AppCompatActivity() {
     private val menuFragment = MenuFragment()
     private val statisticFragment = StatisticFragment()
     private val profileFragment = ProfileFragment()
+    private var menuPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        checkBackStackForBNB.add(0)
+        menuPosition = intent.getIntExtra("menu_position", 0)
+
+        when (menuPosition) {
+            0 -> {checkBackStackForBNB = 0}
+            2 -> {
+                checkBackStackForBNB = 1
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, libraryFragment)
+                    .addToBackStack(null)
+                    .commit()
+                binding.bnb.menu.getItem(1).isChecked = true
+            }
+            3 -> {
+                checkBackStackForBNB = 2
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, menuFragment)
+                    .addToBackStack(null)
+                    .commit()
+                binding.bnb.menu.getItem(2).isChecked = true
+            }
+        }
 
         binding.apply {
             bnb.setOnItemSelectedListener {
-
                 when(it.itemId){
                     R.id.bnb_home -> {
                         supportFragmentManager.beginTransaction()
@@ -36,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, mainFragment)
                             .addToBackStack(null)
                             .commit()
-                        checkBackStackForBNB.add(0)
+                        checkBackStackForBNB = 0
                         true
                     }
                     R.id.bnb_library -> {
@@ -45,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, libraryFragment)
                             .addToBackStack(null)
                             .commit()
-                        checkBackStackForBNB.add(1)
+                        checkBackStackForBNB = 1
                         true
                     }
                     R.id.bnb_menu ->{
@@ -54,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, menuFragment)
                             .addToBackStack(null)
                             .commit()
-                        checkBackStackForBNB.add(2)
+                        checkBackStackForBNB = 2
                         true
                     }
                     R.id.bnb_statistic -> {
@@ -63,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, statisticFragment)
                             .addToBackStack(null)
                             .commit()
-                        checkBackStackForBNB.add(3)
+                        checkBackStackForBNB = 3
                         true
                     }
                     R.id.bnb_profile -> {
@@ -72,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                             .replace(R.id.fragmentContainerView, profileFragment)
                             .addToBackStack(null)
                             .commit()
-                        checkBackStackForBNB.add(4)
+                        checkBackStackForBNB = 4
                         true
                     }
 
@@ -83,12 +103,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (checkBackStackForBNB.size == 1){
-            super.onBackPressed()
+        if (checkBackStackForBNB == 0){
+            finishAffinity()
         } else {
-            supportFragmentManager.popBackStack()
-            binding.bnb.menu.getItem(checkBackStackForBNB.get(checkBackStackForBNB.count() - 2)).isChecked = true
-            checkBackStackForBNB.removeAt(checkBackStackForBNB.count() - 1)
+            checkBackStackForBNB = 0
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, mainFragment)
+                .addToBackStack(null)
+                .commit()
+            binding.bnb.menu.getItem(0).isChecked = true
         }
     }
 }

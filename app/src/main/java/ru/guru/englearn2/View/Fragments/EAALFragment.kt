@@ -43,10 +43,11 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                     viewModel.saveLesson(idLesson, editTitle.text!!.toString())
                     val dirImages = File(requireContext().filesDir.path, "images")
                     File(dirImages, lessonTemp).renameTo(File(dirImages, "${lesson.title}.png"))
-                    val intent = Intent(requireContext(), WordListActivity::class.java)
-                    intent.putExtra("idLesson", idLesson)
-                    startActivity(intent)
+//                    val intent = Intent(requireContext(), WordListActivity::class.java)
+//                    intent.putExtra("idLesson", idLesson)
+//                    startActivity(intent)
                 } else Toast.makeText(requireContext(), "Поле заголовка пустое", Toast.LENGTH_SHORT).show()
+                requireActivity().finish()
             }
 
             /** Режим редактирования */

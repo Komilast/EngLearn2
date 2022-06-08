@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import ru.guru.englearn.database.LiveRealmResults
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
@@ -27,7 +28,7 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
 
     private lateinit var binding: FragmentLibraryBinding
     private var viewModel: LibraryVM? = null
-    private var topics: LiveData<ArrayList<Topic>>? = null
+    private var topics: LiveRealmResults<Topic>? = null
     private lateinit var adapter: TopicAdapter
 
     @SuppressLint("FragmentLiveDataObserve")
@@ -44,9 +45,10 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
             if (viewModel == null) viewModel = ViewModelProvider(this@LibraryFragment)[LibraryVM::class.java]
             if (topics == null) topics = viewModel!!.getAllTopics()
             topics!!.observe(this@LibraryFragment){
-                adapter.setData(it)
+                adapter.setData(ArrayList(it))
             }
         }
+
 
         Log.d("My", "SpeedTest: LibraryFragment/onCreateView - finish: ${(System.nanoTime() - start) / 1000000}ms")
         return@runBlocking binding.root

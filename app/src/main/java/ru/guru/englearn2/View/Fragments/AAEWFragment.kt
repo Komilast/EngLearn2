@@ -69,6 +69,7 @@ class AAEWFragment : Fragment(R.layout.fragment_aaew) {
                     Toast.makeText(requireContext(), "Заполните поле: \"Слово на английском\"", Toast.LENGTH_SHORT).show()
                     engInputLayout.error = "Поле пустое"
                 }
+                requireActivity().finish()
             }
 
             if (idWord != -1){
@@ -97,13 +98,15 @@ class AAEWFragment : Fragment(R.layout.fragment_aaew) {
                         Toast.makeText(requireContext(), "Заполните поле: \"Слово на английском\"", Toast.LENGTH_SHORT).show()
                         engInputLayout.error = "Поле пустое"
                     }
+                    requireActivity().finish()
                 }
             }
 
             cancel.setOnClickListener {
-                val intent = Intent(requireContext(), WordListActivity::class.java)
-                intent.putExtra("idLesson", idLesson)
-                startActivity(intent)
+//                val intent = Intent(requireContext(), WordListActivity::class.java)
+//                intent.putExtra("idLesson", idLesson)
+//                startActivity(intent)
+                requireActivity().finish()
             }
         }
 

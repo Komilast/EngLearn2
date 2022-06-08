@@ -13,11 +13,11 @@ class LibraryVM : ViewModel() {
 
     private val realm = Realm.getDefaultInstance()
 
-    private var topics: LiveData<ArrayList<Topic>>? = null
+    private var topics: LiveRealmResults<Topic>? = null
 
 
-    fun getAllTopics(): LiveData<ArrayList<Topic>>? {
-        if (topics == null) topics = MutableLiveData(ArrayList(realm.where(Topic::class.java).findAll()))
+    fun getAllTopics(): LiveRealmResults<Topic>? {
+        if (topics == null) topics = LiveRealmResults(realm.where(Topic::class.java).findAll())
         return topics
             }
 

@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.realm.RealmChangeListener
-import io.realm.RealmList
+import io.realm.*
+import io.realm.kotlin.addChangeListener
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.guru.englearn.database.LiveRealmObject
@@ -25,13 +25,14 @@ import ru.guru.englearn2.View.Activities.AAEWActivity
 import ru.guru.englearn2.View.Activities.EAALActivity
 import ru.guru.englearn2.View.Adapters.WordListAdapter
 import ru.guru.englearn2.View.Interfaces.OnWordClickListener
+import ru.guru.englearn2.View.Interfaces.SetIdLessonForActivity
 import ru.guru.englearn2.ViewModel.WordListVM
 import ru.guru.englearn2.databinding.FragmentWordlistBinding
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener, RealmChangeListener<RealmList<Word>> {
+class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListener, TextToSpeech.OnInitListener {
 
     private lateinit var binding: FragmentWordlistBinding
     private lateinit var adapter: WordListAdapter
@@ -40,6 +41,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private var viewModel: WordListVM? = null
     private var idLesson: Int = 0
     private var lesson: LiveRealmObject<Lesson>? = null
+    private lateinit var setIdLessonForActivity: SetIdLessonForActivity
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = runBlocking{
@@ -47,6 +49,9 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
         adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment, idLesson)
+
+        setIdLessonForActivity = requireContext() as SetIdLessonForActivity
+        setIdLessonForActivity.set(idLesson)
 
         binding.apply {
 
@@ -57,7 +62,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             words!!.observe(this@WordListFragment) {
                 adapter.setData(ArrayList(words!!.value!!))
             }
-            words!!.value!!.addChangeListener(this@WordListFragment)
+            words!!.value!!.addChangeListener{ t -> adapter.setData(ArrayList(t))}
             lesson?.observe(this@WordListFragment) {
                 lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
                 head.title = it.title
@@ -68,6 +73,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 idLesson >= 0 -> {
                     lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
                     head.title = lesson!!.value!!.title
+                    lesson!!.value!!.addChangeListener( RealmObjectChangeListener<Lesson>{t, changeSet -> head.title = t.title})
                 }
                 idLesson == -1 -> {
                     head.title = "Избранное"
@@ -137,10 +143,6 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         if (status == TextToSpeech.SUCCESS){
             textToSpeech.language = Locale.US
         }
-    }
-
-    override fun onChange(t: RealmList<Word>) {
-        adapter.setData(ArrayList(t))
     }
 
 }
