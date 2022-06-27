@@ -4,6 +4,15 @@ plugins {
     id 'org.jetbrains.kotlin.kapt'
 }
 
+repositories {
+    google()
+    //noinspection JcenterRepositoryObsolete
+    jcenter()
+    maven {
+        url  "https://dl.bintray.com/d-max/spots-dialog"
+    }
+}
+
 apply plugin: "realm-android"
 
 android {
@@ -39,11 +48,11 @@ android {
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

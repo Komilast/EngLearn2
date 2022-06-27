@@ -8,6 +8,8 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -42,6 +44,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private var idLesson: Int = 0
     private var lesson: LiveRealmObject<Lesson>? = null
     private lateinit var setIdLessonForActivity: SetIdLessonForActivity
+    private var onSetImageListener: ActivityResultLauncher<Intent>? = null
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = runBlocking{
@@ -49,6 +52,12 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
         adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment, idLesson)
+        onSetImageListener = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if (it.resultCode == -1){
+                binding.lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
+
+            }
+        }
 
         setIdLessonForActivity = requireContext() as SetIdLessonForActivity
         setIdLessonForActivity.set(idLesson)
@@ -63,11 +72,12 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 adapter.setData(ArrayList(words!!.value!!))
             }
             words!!.value!!.addChangeListener{ t -> adapter.setData(ArrayList(t))}
-            lesson?.observe(this@WordListFragment) {
-                lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
-                head.title = it.title
-                Log.d("My", it.title)
-            }
+//            lesson?.observe(this@WordListFragment) {
+//                lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
+//                head.title = it.title
+//                Log.d("My", it.title)
+//            }
+            File(requireActivity().filesDir.path, "images")
 
             when {
                 idLesson >= 0 -> {
@@ -96,7 +106,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                         "Редактировать урок" -> {
                             val intent = Intent(requireContext(), EAALActivity::class.java)
                             intent.putExtra("idLesson", idLesson)
-                            startActivity(intent)
+                            onSetImageListener!!.launch(intent)
                             return@setOnMenuItemClickListener true
                         }
                         else -> {return@setOnMenuItemClickListener false}
