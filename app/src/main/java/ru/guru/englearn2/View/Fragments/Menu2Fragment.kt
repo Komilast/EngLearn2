@@ -1,24 +1,20 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.guru.englearn2.R
-import ru.guru.englearn2.databinding.FragmentMainBinding
+import ru.guru.englearn2.databinding.FragmentMenu2Binding
 
-class MainFragment : Fragment(R.layout.fragment_main) {
+class Menu2Fragment : Fragment(R.layout.fragment_menu2) {
 
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMenu2Binding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentMenu2Binding.inflate(inflater, container, false)
 
-        binding.apply {
-
-        }
         return binding.root
     }
 
