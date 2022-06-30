@@ -58,6 +58,22 @@ class WordListVM : ViewModel() {
         }
     }
 
+    fun lessonFav(lesson: Lesson){
+        realm.executeTransaction {
+            val favLesson = it.where(Menu::class.java).findFirst()!!.favLesson!!
+            if (lesson.isFavorite == -1){
+                var maxPosFav = favLesson.max("isFavorite")?.toInt()
+                if (maxPosFav == null) maxPosFav = -1
+                maxPosFav++
+                lesson.isFavorite = maxPosFav
+                favLesson.add(lesson)
+            } else {
+                favLesson.remove(lesson)
+                lesson.isFavorite = -1
+            }
+        }
+    }
+
 
 
     fun wordFav(word: Word) {
@@ -65,7 +81,7 @@ class WordListVM : ViewModel() {
             val favWords = it.where(Menu::class.java).findFirst()!!.favWords!!
             if (word.isFavorite == -1) {
                 var maxPosFav = favWords.max("isFavorite")?.toInt()
-                Log.d("My", maxPosFav?.toInt().toString())
+                Log.d("My", maxPosFav.toString())
                 if (maxPosFav == null) maxPosFav = -1
                 maxPosFav++
                 word.isFavorite = maxPosFav

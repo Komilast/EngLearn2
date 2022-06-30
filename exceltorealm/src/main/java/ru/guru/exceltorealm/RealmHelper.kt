@@ -14,6 +14,7 @@ class RealmHelper(private val context: Context) {
 
 
 
+    @Suppress("NAME_SHADOWING")
     suspend fun createBase() {
         val realm = Realm.getDefaultInstance()
         realm.executeTransactionAwait(Dispatchers.IO) { val array = ExcelHelper().getBooks(context)
@@ -30,6 +31,7 @@ class RealmHelper(private val context: Context) {
                     lesson.title = mLesson.title
                     lesson.number = topic.lessons.indexOf(lesson)
                     lesson.topic = topic
+                    lesson.isFavorite = -1
                     for (mWord in mLesson.rows){
                         val id = realm.where(Word::class.java).max("id")
                         val nextId = if (id == null) 0 else id.toInt() + 1
@@ -58,6 +60,7 @@ class RealmHelper(private val context: Context) {
             val menu = it.createObject(Menu::class.java)
             menu.favWords = RealmList()
             menu.delWords = RealmList()
+            menu.favWords = RealmList()
         }
 
     }

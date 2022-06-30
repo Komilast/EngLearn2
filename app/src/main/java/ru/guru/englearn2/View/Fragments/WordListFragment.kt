@@ -101,16 +101,17 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
             lessonMore.setOnClickListener {
                 val popupMenu = PopupMenu(requireContext(), lessonMore)
                 popupMenu.menuInflater.inflate(R.menu.lesson_menu, popupMenu.menu)
+                if (lesson!!.value!!.isFavorite != -1) popupMenu.menu.getItem(1).title = "Удалить из избранного"
                 popupMenu.setOnMenuItemClickListener {
                     when (it.title){
                         "Редактировать урок" -> {
                             val intent = Intent(requireContext(), EAALActivity::class.java)
                             intent.putExtra("idLesson", idLesson)
                             onSetImageListener!!.launch(intent)
-                            return@setOnMenuItemClickListener true
                         }
-                        else -> {return@setOnMenuItemClickListener false}
+                        "Добавить в избранное", "Удалить из избранного" -> viewModel!!.lessonFav(lesson!!.value!!)
                     }
+                    return@setOnMenuItemClickListener true
                 }
                 popupMenu.show()
             }

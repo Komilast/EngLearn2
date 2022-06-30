@@ -1,5 +1,6 @@
 package ru.guru.exceltorealm
 
+import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.*
@@ -18,6 +19,7 @@ open class Lesson(
     var id: Int? = null,
     var number: Int = 0,
     var topic: Topic? = null,
+    var isFavorite: Int = -1,
     var words: RealmList<Word> = RealmList()
 ): RealmObject()
 
@@ -39,5 +41,6 @@ open class Word(
 
 open class Menu(
     var favWords: RealmList<Word>? = null,
+    var favLesson: RealmList<Lesson>? = null,
     var delWords: RealmList<Word>? = null
 ) : RealmObject()
