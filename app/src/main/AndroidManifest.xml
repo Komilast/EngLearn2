@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EngLearn2">
         <activity
+            android:name=".View.Activities.LessonListActivity"
+            android:exported="false" />
+        <activity
             android:name=".View.Activities.EAALActivity"
             android:exported="false" />
         <activity
