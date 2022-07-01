@@ -14,7 +14,6 @@ class WordListAdapter(
     private val context: Context,
     private var data: ArrayList<Word>,
     private val listener: OnWordClickListener,
-    private val mode: Int
 ) : RecyclerView.Adapter<WordListHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordListHolder {
         return WordListHolder(

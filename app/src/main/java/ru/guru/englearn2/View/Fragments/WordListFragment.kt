@@ -51,7 +51,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         binding = FragmentWordlistBinding.inflate(inflater)
         idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
-        adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment, idLesson)
+        adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment)
         onSetImageListener = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == -1){
                 binding.lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
@@ -72,11 +72,6 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 adapter.setData(ArrayList(words!!.value!!))
             }
             words!!.value!!.addChangeListener{ t -> adapter.setData(ArrayList(t))}
-//            lesson?.observe(this@WordListFragment) {
-//                lessonImage.setImageDrawable(Drawable.createFromStream(requireContext().assets.open("images/${it.title}.png"), it.title))
-//                head.title = it.title
-//                Log.d("My", it.title)
-//            }
             File(requireActivity().filesDir.path, "images")
 
             when {

@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Fragments.*
+import ru.guru.englearn2.View.Interfaces.OnMenuClick
 import ru.guru.englearn2.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnMenuClick {
 
     companion object {
         var checkBackStackForBNB = 0
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private val mainFragment = MainFragment()
     private val libraryFragment = LibraryFragment()
     private val menuFragment = MenuFragment()
+    private val menu2Fragment = Menu2Fragment()
     private val statisticFragment = StatisticFragment()
     private val profileFragment = ProfileFragment()
     private var menuPosition: Int = 0
@@ -28,7 +30,9 @@ class MainActivity : AppCompatActivity() {
         menuPosition = intent.getIntExtra("menu_position", 0)
 
         when (menuPosition) {
-            0 -> {checkBackStackForBNB = 0}
+            0 -> {
+                checkBackStackForBNB = 0
+            }
             2 -> {
                 checkBackStackForBNB = 1
                 supportFragmentManager.beginTransaction()
@@ -49,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
             bnb.setOnItemSelectedListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.bnb_home -> {
                         supportFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
@@ -68,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                         checkBackStackForBNB = 1
                         true
                     }
-                    R.id.bnb_menu ->{
+                    R.id.bnb_menu -> {
                         supportFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
                             .replace(R.id.fragmentContainerView, menuFragment)
@@ -103,7 +107,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (checkBackStackForBNB == 0){
+        if (checkBackStackForBNB == 0) {
             finishAffinity()
         } else {
             checkBackStackForBNB = 0
@@ -113,5 +117,11 @@ class MainActivity : AppCompatActivity() {
                 .commit()
             binding.bnb.menu.getItem(0).isChecked = true
         }
+    }
+
+    override fun onClick(mode: Int) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, menu2Fragment)
+            .addToBackStack(null).commit()
+        menu2Fragment.arguments?.putInt("mode", mode)
     }
 }
