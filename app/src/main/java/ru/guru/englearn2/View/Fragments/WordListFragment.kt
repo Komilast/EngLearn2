@@ -55,10 +55,8 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         onSetImageListener = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == -1){
                 binding.lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images"), "${lesson!!.value!!.title}.png").path))
-
             }
         }
-
         setIdLessonForActivity = requireContext() as SetIdLessonForActivity
         setIdLessonForActivity.set(idLesson)
 
@@ -105,6 +103,10 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                             onSetImageListener!!.launch(intent)
                         }
                         "Добавить в избранное", "Удалить из избранного" -> viewModel!!.lessonFav(lesson!!.value!!)
+                        "Удалить урок" -> {
+                            viewModel!!.deleteLesson(0, lesson!!.value!!)
+                            requireActivity().finish()
+                        }
                     }
                     return@setOnMenuItemClickListener true
                 }

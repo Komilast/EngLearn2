@@ -9,4 +9,8 @@
         android:id="@+id/favorite_lesson"
         android:title="Добавить в избранное"
         tools:ignore="HardcodedText" />
+    <item
+        android:id="@+id/delete_lesson"
+        android:title="Удалить урок"
+        tools:ignore="HardcodedText"/>
 </menu>

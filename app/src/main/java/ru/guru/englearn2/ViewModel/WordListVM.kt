@@ -109,6 +109,15 @@ class WordListVM : ViewModel() {
         }
     }
 
+    fun deleteLesson(idTopic: Int, lesson: Lesson){
+        val menu = realm.where(Menu::class.java).findFirst()!!
+        realm.executeTransaction {
+            menu.delLesson!!.add(lesson)
+            lesson.topic!!.lessons.remove(lesson)
+            it.where(Menu::class.java).findFirst()!!.favLesson!!.remove(lesson)
+        }
+    }
+
     fun restoreWord(word: Word) {
         realm.executeTransaction {
             word.lesson!!.words.add(word)

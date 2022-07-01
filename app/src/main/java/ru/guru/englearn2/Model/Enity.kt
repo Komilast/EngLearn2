@@ -41,5 +41,6 @@ open class Word(
 open class Menu(
     var favWords: RealmList<Word>? = null,
     var favLesson: RealmList<Lesson>? = null,
-    var delWords: RealmList<Word>? = null
+    var delWords: RealmList<Word>? = null,
+    var delLesson: RealmList<Lesson>? = null
 ) : RealmObject()

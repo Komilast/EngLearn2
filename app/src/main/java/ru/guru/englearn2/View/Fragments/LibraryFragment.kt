@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.realm.RealmResults
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.guru.englearn.database.LiveRealmResults
@@ -28,7 +29,7 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
 
     private lateinit var binding: FragmentLibraryBinding
     private var viewModel: LibraryVM? = null
-    private var topics: LiveRealmResults<Topic>? = null
+    private var topics: RealmResults<Topic>? = null
     private lateinit var adapter: TopicAdapter
 
     @SuppressLint("FragmentLiveDataObserve")
@@ -44,9 +45,8 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
         launch {
             if (viewModel == null) viewModel = ViewModelProvider(this@LibraryFragment)[LibraryVM::class.java]
             if (topics == null) topics = viewModel!!.getAllTopics()
-            topics!!.observe(this@LibraryFragment){
-                adapter.setData(ArrayList(it))
-            }
+            adapter.setData(ArrayList(topics!!))
+            topics!!.addChangeListener { t -> adapter.setData(ArrayList(t)) }
         }
 
 

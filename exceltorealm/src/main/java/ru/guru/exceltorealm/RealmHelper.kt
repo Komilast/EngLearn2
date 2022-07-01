@@ -60,7 +60,8 @@ class RealmHelper(private val context: Context) {
             val menu = it.createObject(Menu::class.java)
             menu.favWords = RealmList()
             menu.delWords = RealmList()
-            menu.favWords = RealmList()
+            menu.favLesson = RealmList()
+            menu.delLesson = RealmList()
         }
 
     }
