@@ -28,6 +28,7 @@ import java.io.FileOutputStream
 class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
     private lateinit var binding: FragmentEaalBinding
+    private var idTopic: Int = 0
     private lateinit var lesson: Lesson
     private lateinit var viewModel: EAALVM
     private var idLesson: Int = 0
