@@ -29,12 +29,10 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
 
         binding.apply {
             fav.setOnClickListener {
-                onMenuClick.onClick(0)
+                onMenuClick.onClick(-1)
             }
             del.setOnClickListener {
-                val intent = Intent(requireContext(), WordListActivity::class.java)
-                intent.putExtra("idLesson", -2)
-                startActivity(intent)
+                onMenuClick.onClick(-2)
             }
         }
 

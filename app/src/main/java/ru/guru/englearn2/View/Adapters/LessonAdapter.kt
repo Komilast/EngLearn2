@@ -49,7 +49,7 @@ class LessonAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (idTopic != -1) data.size + 1 else data.size
+        return if (idTopic >= 0) data.size + 1 else data.size
     }
 
 

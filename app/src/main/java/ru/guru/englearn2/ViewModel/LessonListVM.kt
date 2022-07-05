@@ -16,6 +16,7 @@ class LessonListVM : ViewModel() {
     private val realm = Realm.getDefaultInstance()
 
     private var lessonsFav: LiveData<RealmList<Lesson>>? = null
+    private var lessonsDel: LiveData<RealmList<Lesson>>? = null
     private var lessons: LiveData<RealmList<Lesson>>? = null
 
     fun getAllLessons(idTopic: Int): LiveData<RealmList<Lesson>>?{
@@ -27,6 +28,10 @@ class LessonListVM : ViewModel() {
             idTopic == -1 -> {
                 if (lessonsFav == null) lessonsFav = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.favLesson)
                 lessonsFav
+            }
+            idTopic == -2 -> {
+                if (lessonsDel == null) lessonsDel = MutableLiveData(realm.where(Menu::class.java).findFirst()!!.delLesson)
+                lessonsDel
             }
             else -> null
         }

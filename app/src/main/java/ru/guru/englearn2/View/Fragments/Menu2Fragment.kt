@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.LessonListActivity
+import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.databinding.FragmentMenu2Binding
 
 class Menu2Fragment : Fragment(R.layout.fragment_menu2) {
@@ -20,7 +21,12 @@ class Menu2Fragment : Fragment(R.layout.fragment_menu2) {
         binding.apply {
             lesson.setOnClickListener {
                 val intent = Intent(requireContext(), LessonListActivity::class.java)
-                intent.putExtra("idTopic", -1)
+                intent.putExtra("idTopic", arguments!!.getInt("mode"))
+                startActivity(intent)
+            }
+            words.setOnClickListener {
+                val intent = Intent(requireContext(), WordListActivity::class.java)
+                intent.putExtra("idLesson", arguments!!.getInt("mode"))
                 startActivity(intent)
             }
         }

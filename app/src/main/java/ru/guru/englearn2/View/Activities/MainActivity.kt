@@ -122,6 +122,8 @@ class MainActivity : AppCompatActivity(), OnMenuClick {
     override fun onClick(mode: Int) {
         supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, menu2Fragment)
             .addToBackStack(null).commit()
-        menu2Fragment.arguments?.putInt("mode", mode)
+        val arg = Bundle()
+        arg.putInt("mode", mode)
+        menu2Fragment.arguments = arg
     }
 }
