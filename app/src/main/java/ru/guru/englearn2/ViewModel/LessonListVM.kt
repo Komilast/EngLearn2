@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.realm.Realm
 import io.realm.RealmList
-import io.realm.kotlin.where
-import ru.guru.englearn.database.LiveRealmObject
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Menu
 import ru.guru.englearn2.Model.Topic

@@ -1,7 +1,6 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.RealmResults
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import ru.guru.englearn.database.LiveRealmResults
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R

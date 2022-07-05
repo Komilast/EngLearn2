@@ -5,10 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmList
-import io.realm.RealmObject
-import io.realm.kotlin.where
 import ru.guru.englearn.database.LiveRealmObject
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Menu
@@ -109,12 +106,24 @@ class WordListVM : ViewModel() {
         }
     }
 
-    fun deleteLesson(idTopic: Int, lesson: Lesson){
+    fun deleteLesson(lesson: Lesson){
         val menu = realm.where(Menu::class.java).findFirst()!!
         realm.executeTransaction {
             menu.delLesson!!.add(lesson)
             lesson.topic!!.lessons.remove(lesson)
-            it.where(Menu::class.java).findFirst()!!.favLesson!!.remove(lesson)
+            menu.favLesson!!.remove(lesson)
+        }
+    }
+
+    fun restoreLesson(lesson: Lesson){
+        realm.executeTransaction {
+            lesson.topic!!.lessons.add(lesson)
+            lesson.topic!!.lessons.sortBy { it.number }
+            it.where(Menu::class.java).findFirst()!!.delLesson!!.remove(lesson)
+            if (lesson.isFavorite != -1) {
+                it.where(Menu::class.java).findFirst()!!.favLesson!!.add(lesson)
+                it.where(Menu::class.java).findFirst()!!.favLesson!!.sortBy { it.isFavorite }
+            }
         }
     }
 

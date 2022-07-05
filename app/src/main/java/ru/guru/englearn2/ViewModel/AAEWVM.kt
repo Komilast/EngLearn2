@@ -2,8 +2,6 @@ package ru.guru.englearn2.ViewModel
 
 import androidx.lifecycle.ViewModel
 import io.realm.Realm
-import io.realm.RealmList
-import io.realm.kotlin.where
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Word
 

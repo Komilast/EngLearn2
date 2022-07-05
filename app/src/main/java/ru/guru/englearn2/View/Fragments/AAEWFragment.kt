@@ -1,6 +1,5 @@
 package ru.guru.englearn2.View.Fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.guru.englearn2.Model.Word
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.View.Adapters.AAEWAdapter

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
@@ -16,7 +15,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.realm.*
-import io.realm.kotlin.addChangeListener
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ru.guru.englearn.database.LiveRealmObject
@@ -104,7 +102,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                         }
                         "Добавить в избранное", "Удалить из избранного" -> viewModel!!.lessonFav(lesson!!.value!!)
                         "Удалить урок" -> {
-                            viewModel!!.deleteLesson(0, lesson!!.value!!)
+                            viewModel!!.deleteLesson(lesson!!.value!!)
                             requireActivity().finish()
                         }
                     }

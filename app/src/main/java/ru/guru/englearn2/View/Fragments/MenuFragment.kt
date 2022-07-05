@@ -1,15 +1,12 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.guru.englearn2.R
-import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.View.Interfaces.OnMenuClick
 import ru.guru.englearn2.databinding.FragmentMenuBinding
 

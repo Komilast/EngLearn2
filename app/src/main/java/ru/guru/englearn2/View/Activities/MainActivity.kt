@@ -2,7 +2,6 @@ package ru.guru.englearn2.View.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Fragments.*
 import ru.guru.englearn2.View.Interfaces.OnMenuClick

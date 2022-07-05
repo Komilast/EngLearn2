@@ -2,9 +2,7 @@ package ru.guru.englearn2.View.Fragments
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.Instrumentation
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -19,7 +17,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.widget.addTextChangedListener
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
@@ -32,7 +29,6 @@ import ru.guru.englearn2.R
 import ru.guru.englearn2.ViewModel.EAALVM
 import ru.guru.englearn2.databinding.FragmentEaalBinding
 import java.io.*
-import java.net.URI
 
 class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
