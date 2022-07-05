@@ -1,8 +1,10 @@
 package ru.guru.englearn2
 
+import android.Manifest
+import android.app.Activity
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.io.File
