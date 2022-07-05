@@ -188,6 +188,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                     CoroutineScope(Dispatchers.IO).launch {
                         job.join()
                         dialogLoad.dismiss()
+                        requireActivity().setResult(-1)
                         requireActivity().finish()
                     }
 
@@ -204,7 +205,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
         return binding.root
     }
 
-    fun rotatePhoto(uri: Uri): Float{
+    private fun rotatePhoto(uri: Uri): Float{
         var rotate = 0F
         val exifInterface = ExifInterface(uri.lastPathSegment!!.toString())
         when (exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)){
