@@ -2,6 +2,7 @@ package ru.guru.englearn2.View.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -35,8 +36,7 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
         idTopic = requireActivity().intent.getIntExtra("idTopic", 0)
         viewModel = ViewModelProvider(this@LessonListFragment)[LessonListVM::class.java]
         lessons = viewModel.getAllLessons(idTopic)!!
-        adapter = LessonAdapter(ArrayList(lessons.value!!), requireContext(), this)
-
+        adapter = LessonAdapter(ArrayList(lessons.value!!), requireContext(), this, idTopic)
 
         binding.apply {
             recycler.adapter = adapter
@@ -50,6 +50,10 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
         val intent = Intent(requireContext(), WordListActivity::class.java)
         intent.putExtra("idLesson", lesson.id)
         startActivity(intent)
+    }
+
+    override fun onAddClick(idTopic: Int) {
+        Log.d("My", "Zero")
     }
 
 }

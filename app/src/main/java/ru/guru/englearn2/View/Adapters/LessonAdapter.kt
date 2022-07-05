@@ -11,9 +11,10 @@ import ru.guru.englearn2.View.Holders.LessonHolder
 import ru.guru.englearn2.View.Interfaces.onLessonClickListener
 
 class LessonAdapter(
-    private var data: ArrayList<Lesson>,
+    var data: ArrayList<Lesson>,
     private val context: Context,
-    private val listener: onLessonClickListener
+    private val listener: onLessonClickListener,
+    private val idTopic: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     companion object{
@@ -44,10 +45,12 @@ class LessonAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is LessonHolder) holder.bind(data[position], context, listener)
-        else if (holder is LessonFooterHolder) holder.bind(context)
+        else if (holder is LessonFooterHolder) holder.bind(listener, idTopic)
     }
 
     override fun getItemCount(): Int {
-        return data.size + 1
+        return if (idTopic != -1) data.size + 1 else data.size
     }
+
+
 }

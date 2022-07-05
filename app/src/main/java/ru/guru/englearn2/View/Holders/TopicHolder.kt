@@ -15,7 +15,7 @@ class TopicHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(topic: Topic, context: Context, listener: onLessonClickListener) = with(binding){
         title.text = topic.title
-        val adapter = LessonAdapter(ArrayList(topic.lessons), context, listener)
+        val adapter = LessonAdapter(ArrayList(topic.lessons), context, listener, topic.id!!)
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }

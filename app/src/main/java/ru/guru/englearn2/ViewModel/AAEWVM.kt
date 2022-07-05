@@ -19,7 +19,7 @@ private val realm = Realm.getDefaultInstance()
                 val nextId = realm.where(Word::class.java).max("id")!!.toInt() + 1
                 word = realm.createObject(Word::class.java, nextId)
                 word.lesson = lesson
-                word.number = lesson.words.max("id")!!.toInt()
+                word.number = lesson.words.max("number")!!.toInt()
                 word.eng = eng
                 word.rus.addAll(rus)
                 word.tra = "[$tra]"

@@ -109,7 +109,7 @@ class AAEWFragment : Fragment(R.layout.fragment_aaew) {
                         if (rusListAdapter.itemCount >= 1) {                                         // ПРОВЕРЯЕМ ЧТО ЕСТЬ ХОТЯБЫ ОДНО СЛОВО В СПИСКЕ РУССКИХ СЛОВ
                             viewModel.saveWord(                                                      // СОХРАНЯЕМ СЛОВО ЧЕРЕЗ VIEWMODEL
                                 idLesson,                                                            // УКАЗЫВАЕМ В КАКОМ УРОКЕ СОХРАНИТЬ СЛОВО
-                                idWord,                                                              // УКАЗЫВАЕМ ID СЛОВА (ЕСЛИ ID = -1, ТО АВТОМАТОМ ПРИСВОИТСЯ НОВЫЙ ID)
+                                idWord,                                                              // УКАЗЫВАЕМ ID СЛОВА
                                 editEng.text?.toString()!!,                                          // УКАЗЫВАЕМ СЛОВО НА АНГЛИЙСКОМ
                                 rusListAdapter.data,                                                 // УКАЗЫВАЕМ СПИСОК РУССКИХ СЛОВ ПЕРЕДАВ МАССИВ ИЗ АДАПТЕРА
                                 editTra.text?.toString()!!                                           // УКАЗЫВАЕМ ТРАНСКРИПЦИЮ

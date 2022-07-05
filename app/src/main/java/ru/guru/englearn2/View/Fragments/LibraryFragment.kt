@@ -19,6 +19,7 @@ import ru.guru.englearn.database.LiveRealmResults
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
+import ru.guru.englearn2.View.Activities.EAALActivity
 import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.View.Adapters.TopicAdapter
 import ru.guru.englearn2.View.Interfaces.onLessonClickListener
@@ -57,6 +58,13 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
     override fun onClick(lesson: Lesson) {
         val intent = Intent(requireContext(), WordListActivity::class.java)
         intent.putExtra("idLesson", lesson.id!!)
+        startActivity(intent)
+    }
+
+    override fun onAddClick(idTopic: Int) {
+        val intent = Intent(requireContext(), EAALActivity::class.java)
+        intent.putExtra("idTopic", idTopic)
+        intent.putExtra("idLesson", -1)
         startActivity(intent)
     }
 
