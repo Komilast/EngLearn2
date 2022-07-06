@@ -68,7 +68,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
         // Получаем файл картинки урока в случае если урок редактируется
         if (lesson != null) imageFile = File(
-            File(requireContext().filesDir.path, "images"),
+            File(requireContext().filesDir.path, "images/lessons"),
             "${lesson?.title}.png"
         )
 
@@ -150,7 +150,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
                     if (imageFile == null) {
                         imageFile = File(
-                            File(requireContext().filesDir.path, "images"),
+                            File(requireContext().filesDir.path, "images/lessons"),
                             "${editTitle.text!!}.png"
                         )
                     }
@@ -158,7 +158,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                     if (imageFile!!.isFile) {
                         imageFile!!.renameTo(
                             File(
-                                File(requireContext().filesDir.path, "images"),
+                                File(requireContext().filesDir.path, "images/lessons"),
                                 "${editTitle.text!!}.png"
                             )
                         )

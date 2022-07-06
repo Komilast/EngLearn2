@@ -32,14 +32,23 @@ class App : Application() {
         // Запуск алгоритма если приложение запускается впервые
         if (check == 0) {
 
-            // Получаем название всех файлов из assets/images
-            val images: ArrayList<String> = ArrayList()
-            images.addAll(assets.list("images/")!!)
+            // Получаем название всех файлов из assets/images/lessons
+            val imagesLessons: ArrayList<String> = ArrayList()
+            imagesLessons.addAll(assets.list("images/lessons")!!)
 
             // Удаляем из списка все лишние системные файлы
-            images.removeAt(0)
-            images.removeAt(0)
-            images.removeAt(0)
+//            imagesLessons.removeAt(0)
+//            imagesLessons.removeAt(0)
+//            imagesLessons.removeAt(0)
+
+            // Получаем название всех файлов из assets/images/topics
+            val imagesTopics: ArrayList<String> = ArrayList()
+            imagesTopics.addAll(assets.list("images/topics")!!)
+
+            // Удаляем из списка все лишние системные файлы
+//            imagesTopics.removeAt(0)
+//            imagesTopics.removeAt(0)
+//            imagesTopics.removeAt(0)
 
             // Получаем директорию файлов
             val path = filesDir.path
@@ -48,14 +57,32 @@ class App : Application() {
             val imagesDir = File(path, "images")
             imagesDir.mkdirs()
 
-            // Создаём цикл для копирования новых картинок
-            for (image in images) {
-                val file = File(imagesDir, image)
+            // Создаём новую папку для картинок уроков
+            val imagesLessonsDir = File(imagesDir, "lessons")
+            imagesLessonsDir.mkdirs()
+
+            // Создаём новую папку для картинок разделов
+            val imagesTopicsDir = File(imagesDir, "topics")
+            imagesTopicsDir.mkdirs()
+
+            // Создаём цикл для копирования новых картинок уроков
+            for (image in imagesLessons) {
+                val file = File(imagesLessonsDir, image)
                     file.createNewFile()
                     FileOutputStream(file).use {
-                        it.write(assets.open("images/$image").readBytes())
+                        it.write(assets.open("images/lessons/$image").readBytes())
                     }
             }
+
+            // Создаём цикл для копирования новых картинок разделов
+            for (image in imagesTopics){
+                val file = File(imagesTopicsDir, image)
+                file.createNewFile()
+                FileOutputStream(file).use {
+                    it.write(assets.open("images/topics/$image").readBytes())
+                }
+            }
+
             // Записываем что приложение запустилось впервые
             val editor = pref.edit()
             editor.putInt("NewApp", 1)
