@@ -18,7 +18,7 @@ class LessonHolder(view: View) : RecyclerView.ViewHolder(view), RealmChangeListe
     fun bind(lesson: Lesson, context: Context, listener: onLessonClickListener) = with(binding){
         lesson.addChangeListener(this@LessonHolder)
         title.text = lesson.title
-        image.setImageDrawable(Drawable.createFromPath(File(File(context.filesDir.path, "images/lessons"), "${lesson.title}.png").path))
+        image.setImageDrawable(Drawable.createFromPath(File(File(context.filesDir.path, "images/lessons"), "${lesson.title}_${lesson.id}.png").path))
         container.setOnClickListener {
             listener.onClick(lesson)
         }

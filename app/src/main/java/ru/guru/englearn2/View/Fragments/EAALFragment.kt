@@ -69,7 +69,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
         // Получаем файл картинки урока в случае если урок редактируется
         if (lesson != null) imageFile = File(
             File(requireContext().filesDir.path, "images/lessons"),
-            "${lesson?.title}.png"
+            "${lesson?.title}_${lesson?.id}.png"
         )
 
         // Задаём текущую картинку урока
@@ -146,12 +146,12 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
             okBtn.setOnClickListener {
                 if (editTitle.text?.length != 0) {
-                    viewModel.saveLesson(idLesson, idTopic, editTitle.text!!.toString())
+                    lesson = viewModel.saveLesson(idLesson, idTopic, editTitle.text!!.toString())
 
                     if (imageFile == null) {
                         imageFile = File(
                             File(requireContext().filesDir.path, "images/lessons"),
-                            "${editTitle.text!!}.png"
+                            "${editTitle.text!!}_${lesson!!.id}.png"
                         )
                     }
 
@@ -159,7 +159,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                         imageFile!!.renameTo(
                             File(
                                 File(requireContext().filesDir.path, "images/lessons"),
-                                "${editTitle.text!!}.png"
+                                "${editTitle.text!!}_${lesson!!.id}.png"
                             )
                         )
                         if (image != resources.getDrawable(

@@ -54,7 +54,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
         adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment)
         onSetImageListener = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             if (it.resultCode == -1){
-                binding.lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images/lessons"), "${lesson!!.value!!.title}.png").path))
+                binding.lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images/lessons"), "${lesson!!.value!!.title}_${lesson!!.value!!.id}.png").path))
             }
         }
         setIdLessonForActivity = requireContext() as SetIdLessonForActivity
@@ -74,7 +74,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
 
             when {
                 idLesson >= 0 -> {
-                    lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images/lessons"), "${lesson!!.value!!.title}.png").path))
+                    lessonImage.setImageDrawable(Drawable.createFromPath(File(File(requireContext().filesDir.path, "images/lessons"), "${lesson!!.value!!.title}_${lesson!!.value!!.id}.png").path))
                     head.title = lesson!!.value!!.title
                     lesson!!.value!!.addChangeListener( RealmObjectChangeListener<Lesson>{t, changeSet -> head.title = t.title})
                 }
