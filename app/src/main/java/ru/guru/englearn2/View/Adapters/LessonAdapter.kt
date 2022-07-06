@@ -52,5 +52,10 @@ class LessonAdapter(
         return if (idTopic >= 0) data.size + 1 else data.size
     }
 
+    fun changeData(data: ArrayList<Lesson>){
+        this.data = data
+        notifyDataSetChanged()
+    }
+
 
 }

@@ -37,6 +37,10 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
         binding.apply {
             recycler.adapter = adapter
             recycler.layoutManager = GridLayoutManager(requireContext(), 3)
+
+            lessons.value!!.addChangeListener { t ->
+                adapter.changeData(ArrayList(t))
+            }
         }
 
         return binding.root
@@ -45,6 +49,7 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
     override fun onClick(lesson: Lesson) {
         val intent = Intent(requireContext(), WordListActivity::class.java)
         intent.putExtra("idLesson", lesson.id)
+        intent.putExtra("idTopic", idTopic)
         startActivity(intent)
     }
 

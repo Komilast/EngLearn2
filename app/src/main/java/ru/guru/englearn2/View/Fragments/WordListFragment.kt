@@ -39,6 +39,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     private lateinit var textToSpeech: TextToSpeech
     private var words: LiveData<RealmList<Word>>? = null
     private var viewModel: WordListVM? = null
+    private var idTopic: Int = 0
     private var idLesson: Int = 0
     private var lesson: LiveRealmObject<Lesson>? = null
     private lateinit var setIdLessonForActivity: SetIdLessonForActivity
@@ -47,6 +48,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = runBlocking{
         binding = FragmentWordlistBinding.inflate(inflater)
+        idTopic = requireActivity().intent.getIntExtra("idTopic", 0)
         idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         textToSpeech = TextToSpeech(requireContext(), this@WordListFragment)
         adapter = WordListAdapter(requireContext(), ArrayList(), this@WordListFragment)
@@ -93,6 +95,10 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 val popupMenu = PopupMenu(requireContext(), lessonMore)
                 popupMenu.menuInflater.inflate(R.menu.lesson_menu, popupMenu.menu)
                 if (lesson!!.value!!.isFavorite != -1) popupMenu.menu.getItem(1).title = "Удалить из избранного"
+                if (idTopic == -2) {
+                    popupMenu.menu.getItem(0).title = "Восстановить"
+                    popupMenu.menu.getItem(1).isVisible = false
+                }
                 popupMenu.setOnMenuItemClickListener {
                     when (it.title){
                         "Редактировать урок" -> {
@@ -103,6 +109,10 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                         "Добавить в избранное", "Удалить из избранного" -> viewModel!!.lessonFav(lesson!!.value!!)
                         "Удалить урок" -> {
                             viewModel!!.deleteLesson(lesson!!.value!!)
+                            requireActivity().finish()
+                        }
+                        "Восстановить" -> {
+                            viewModel!!.restoreLesson(lesson!!.value!!)
                             requireActivity().finish()
                         }
                     }
