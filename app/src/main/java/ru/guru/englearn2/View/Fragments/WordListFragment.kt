@@ -104,6 +104,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                         "Редактировать урок" -> {
                             val intent = Intent(requireContext(), EAALActivity::class.java)
                             intent.putExtra("idLesson", idLesson)
+                            intent.putExtra("idTopic", idTopic)
                             onSetImageListener!!.launch(intent)
                         }
                         "Добавить в избранное", "Удалить из избранного" -> viewModel!!.lessonFav(lesson!!.value!!)
@@ -121,7 +122,7 @@ class WordListFragment : Fragment(R.layout.fragment_wordlist), OnWordClickListen
                 popupMenu.show()
             }
         }
-        Log.d("My", "onCreateView")
+
         return@runBlocking binding.root
     }
 

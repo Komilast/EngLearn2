@@ -17,10 +17,4 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding = FragmentStatisticBinding.inflate(inflater, container, false)
         return binding.root
     }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("My", "Finish")
-    }
-
 }

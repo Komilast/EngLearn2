@@ -78,7 +78,6 @@ class WordListVM : ViewModel() {
             val favWords = it.where(Menu::class.java).findFirst()!!.favWords!!
             if (word.isFavorite == -1) {
                 var maxPosFav = favWords.max("isFavorite")?.toInt()
-                Log.d("My", maxPosFav.toString())
                 if (maxPosFav == null) maxPosFav = -1
                 maxPosFav++
                 word.isFavorite = maxPosFav

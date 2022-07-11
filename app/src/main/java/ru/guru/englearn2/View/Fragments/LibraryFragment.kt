@@ -32,7 +32,6 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View  = runBlocking{
-        val start = System.nanoTime()
         binding = FragmentLibraryBinding.inflate(inflater)
 
         binding.apply {
@@ -47,14 +46,13 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
             topics!!.addChangeListener { t -> adapter.setData(ArrayList(t)) }
         }
 
-
-        Log.d("My", "SpeedTest: LibraryFragment/onCreateView - finish: ${(System.nanoTime() - start) / 1000000}ms")
         return@runBlocking binding.root
     }
 
     override fun onClick(lesson: Lesson) {
         val intent = Intent(requireContext(), WordListActivity::class.java)
         intent.putExtra("idLesson", lesson.id!!)
+        intent.putExtra("idTopic", lesson.topic!!.id)
         startActivity(intent)
     }
 

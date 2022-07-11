@@ -29,6 +29,8 @@ import ru.guru.englearn2.R
 import ru.guru.englearn2.ViewModel.EAALVM
 import ru.guru.englearn2.databinding.FragmentEaalBinding
 import java.io.*
+import java.net.URI
+import java.net.URLEncoder
 
 class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
@@ -41,7 +43,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
     private lateinit var image: Drawable
     private var imageFile: File? = null
     private lateinit var dialogLoad: AlertDialog
-    private val permission: Array<String> = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+    private var oldImage: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,11 +53,9 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
 
         binding = FragmentEaalBinding.inflate(inflater, container, false)
 
-        // Получаем данные из другой активности
         idLesson = requireActivity().intent.getIntExtra("idLesson", 0)
         idTopic = requireActivity().intent.getIntExtra("idTopic", 0)
 
-        // Получаем урок (в случае если нужно его создать, то получим null)
         viewModel = ViewModelProvider(this)[EAALVM::class.java]
         lesson = viewModel.getLesson(idLesson)
 
@@ -66,39 +66,31 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
             .setCancelable(false)
             .build()
 
-        // Получаем файл картинки урока в случае если урок редактируется
-        if (lesson != null) imageFile = File(
-            File(requireContext().filesDir.path, "images/lessons"),
-            "${lesson?.title}_${lesson?.id}.png"
-        )
-
-        // Задаём текущую картинку урока
-        image = if (lesson == null) {
-            resources.getDrawable(R.drawable.rectycle, requireContext().theme)
-        } else {
-            if (imageFile!!.isFile)
-                Drawable.createFromPath(imageFile!!.path)!!
-            else resources.getDrawable(R.drawable.rectycle, requireContext().theme)
+        if (lesson != null) {
+            imageFile = File(
+                File(requireContext().filesDir.path, "images/lessons"),
+                "${lesson!!.title}_${lesson!!.id}.png"
+            )
         }
 
-        // Региструруем зарание корутину для записи картинки в файл
-        @Suppress("BlockingMethodInNonBlockingContext") val job =
-            CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
-                val stream = FileOutputStream(imageFile)
-                image.toBitmap().compress(Bitmap.CompressFormat.PNG, 0, stream)
-                stream.close()
-            }
+        if (lesson == null) {
+            image = resources.getDrawable(R.drawable.rectycle, requireContext().theme)
+        } else {
+            if (imageFile!!.isFile) {
+                image = Drawable.createFromPath(imageFile!!.path)!!
+            } else image = resources.getDrawable(R.drawable.rectycle, requireContext().theme)
+        }
+
+
 
         binding.apply {
 
-            // Проверка правильности ввода
             editTitle.addTextChangedListener {
                 if (editTitle.text?.length == 0)
                     titleEditLayout.error = "Поле не должно быть пустое"
                 else titleEditLayout.error = null
             }
 
-            // Регистрируем получение картинки из телефона
             imagePicker =
                 registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     CoroutineScope(Dispatchers.IO).launch {
@@ -111,6 +103,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                                     .centerCrop()
                                     .get()
                             image = BitmapDrawable(resources, imagePick)
+                            oldImage = 1
                         }
                         launch(Dispatchers.Main) {
                             lessonImage.setImageDrawable(image)
@@ -118,36 +111,36 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                     }
                 }
 
-            val permissionPicker = registerForActivityResult(ActivityResultContracts.RequestPermission()){
-                    isGranted ->
-                Log.d("My", isGranted.toString())
-                if (isGranted){
-                    Log.d("My", "Yes")
-                    val intent = Intent(Intent.ACTION_PICK)
-                    intent.type = "image/*"
-                    imagePicker.launch(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Разрешите использовать мультимедиа", Toast.LENGTH_SHORT).show()
-                }
-            }
 
-            // Установка картинки в ImageView
+            val permissionPicker =
+                registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                    if (isGranted) {
+                        val intent = Intent(Intent.ACTION_PICK)
+                        intent.type = "image/*"
+                        imagePicker.launch(intent)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Разрешите использовать мультимедиа",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            var job: Job? = null
+
             lessonImage.setImageDrawable(image)
 
-            // Запись текста в поле для ввода если урок редактируется
             if (lesson != null) {
                 editTitle.setText(lesson!!.title)
             }
 
-            // Действие при нажатии на картинку и переход в каталог телефона для поиска картинок
             lessonImage.setOnClickListener {
-                    permissionPicker.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                permissionPicker.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
 
             okBtn.setOnClickListener {
                 if (editTitle.text?.length != 0) {
                     lesson = viewModel.saveLesson(idLesson, idTopic, editTitle.text!!.toString())
-
                     if (imageFile == null) {
                         imageFile = File(
                             File(requireContext().filesDir.path, "images/lessons"),
@@ -156,9 +149,10 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                     }
 
                     if (imageFile!!.isFile) {
+                        // ДО И ПОСЛЕ RENAMETO ФАЙЛ ЕСЛИ СУДИТЬ ПО ЛОГАМ НЕ ПЕРЕЕМИНОВАН
                         imageFile!!.renameTo(
                             File(
-                                File(requireContext().filesDir.path, "images/lessons"),
+                                "${requireContext().filesDir.path}/images/lessons",
                                 "${editTitle.text!!}_${lesson!!.id}.png"
                             )
                         )
@@ -167,7 +161,10 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                                 requireContext().theme
                             )
                         ) {
-                            job.start()
+                            if (oldImage != 0) {
+                                job = outputImage(image, imageFile!!)
+                                job!!.start()
+                            }
                             dialogLoad.show()
                         }
                     } else {
@@ -177,13 +174,16 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                             )
                         ) {
                             imageFile!!.createNewFile()
-                            job.start()
+                            job = outputImage(image, imageFile!!)
+                            job!!.start()
                             dialogLoad.show()
                         }
                     }
                     CoroutineScope(Dispatchers.IO).launch {
-                        job.join()
                         dialogLoad.dismiss()
+                        if (job != null){
+                            job!!.join()
+                        }
                         requireActivity().setResult(-1)
                         requireActivity().finish()
                     }
@@ -201,10 +201,15 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
         return binding.root
     }
 
-    private fun rotatePhoto(uri: Uri): Float{
+    private fun rotatePhoto(uri: Uri): Float {
         var rotate = 0F
-        val exifInterface = ExifInterface(uri.lastPathSegment!!.toString())
-        when (exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)){
+        val exifInterface = android.media.ExifInterface(
+            requireContext().contentResolver.openInputStream(uri)!!
+        )
+        when (exifInterface.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )) {
             ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90F
             ExifInterface.ORIENTATION_NORMAL -> rotate = 0F
             ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180F
@@ -212,5 +217,14 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
         }
         return rotate
     }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private fun outputImage(image: Drawable, imageFile: File) =
+        CoroutineScope(Dispatchers.IO).launch(start = CoroutineStart.LAZY) {
+            Log.d("My", "Yes")
+            val stream = FileOutputStream(imageFile)
+            image.toBitmap().compress(Bitmap.CompressFormat.PNG, 0, stream)
+            stream.close()
+        }
 
 }
