@@ -3,9 +3,12 @@ package ru.guru.englearn2.View.Fragments
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.realm.RealmList
 import ru.guru.englearn.database.LiveRealmObject
+import ru.guru.englearn2.Helpers.OutlineSpan
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
@@ -57,6 +60,9 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
                 adapter.changeData(ArrayList(t))
             }
 
+            val outlineSpan = OutlineSpan(Color.BLACK, 4F)
+            var spannable: SpannableString
+
             when {
                 idTopic >= 0 -> {
                     topicImage.setImageDrawable(
@@ -67,7 +73,9 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
                             ).path
                         )
                     )
-                    head.title = topic!!.value!!.title
+                    spannable = SpannableString(topic!!.value!!.title)
+                    spannable.setSpan(outlineSpan, 0, topic!!.value!!.title.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    head.title = spannable
                 }
                 idTopic == -1 -> {
                     head.title = "Избранное"
