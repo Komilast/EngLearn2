@@ -147,15 +147,7 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                             "${editTitle.text!!}_${lesson!!.id}.png"
                         )
                     }
-
                     if (imageFile!!.isFile) {
-                        // ДО И ПОСЛЕ RENAMETO ФАЙЛ ЕСЛИ СУДИТЬ ПО ЛОГАМ НЕ ПЕРЕЕМИНОВАН
-                        imageFile!!.renameTo(
-                            File(
-                                "${requireContext().filesDir.path}/images/lessons",
-                                "${editTitle.text!!}_${lesson!!.id}.png"
-                            )
-                        )
                         if (image != resources.getDrawable(
                                 R.drawable.rectycle,
                                 requireContext().theme
@@ -166,6 +158,12 @@ class EAALFragment : Fragment(R.layout.fragment_eaal) {
                                 job!!.start()
                             }
                             dialogLoad.show()
+                            imageFile!!.renameTo(
+                                File(
+                                    "${requireContext().filesDir.path}/images/lessons",
+                                    "${editTitle.text!!}_${lesson!!.id}.png"
+                                )
+                            )
                         }
                     } else {
                         if (image != resources.getDrawable(
