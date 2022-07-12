@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             app:toolbarId="@+id/toolbar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="#0000"
             app:title="title"
             app:expandedTitleTextAppearance="@style/collapse_title"
             app:collapsedTitleTextAppearance="@style/collapse_title_2"
