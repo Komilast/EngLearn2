@@ -1,6 +1,10 @@
 package ru.guru.englearn2.View.Fragments
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,14 +14,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.realm.RealmList
+import ru.guru.englearn.database.LiveRealmObject
 import ru.guru.englearn2.Model.Lesson
+import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.View.Adapters.LessonAdapter
 import ru.guru.englearn2.View.Interfaces.onLessonClickListener
 import ru.guru.englearn2.ViewModel.LessonListVM
 import ru.guru.englearn2.databinding.FragmentLessonlistBinding
+import java.io.File
 
 class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClickListener {
 
@@ -25,14 +33,21 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
     private lateinit var adapter: LessonAdapter
     private lateinit var viewModel: LessonListVM
     private lateinit var lessons: LiveData<RealmList<Lesson>>
+    private var topic: LiveRealmObject<Topic>? = null
     private var idTopic: Int = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentLessonlistBinding.inflate(inflater, container, false)
         idTopic = requireActivity().intent.getIntExtra("idTopic", 0)
         viewModel = ViewModelProvider(this@LessonListFragment)[LessonListVM::class.java]
         lessons = viewModel.getAllLessons(idTopic)!!
         adapter = LessonAdapter(ArrayList(lessons.value!!), requireContext(), this, idTopic)
+        topic = viewModel.getTopic(idTopic)
+        Log.d("My", topic?.value.toString())
 
         binding.apply {
             recycler.adapter = adapter
@@ -41,6 +56,28 @@ class LessonListFragment : Fragment(R.layout.fragment_lessonlist), onLessonClick
             lessons.value!!.addChangeListener { t ->
                 adapter.changeData(ArrayList(t))
             }
+
+            when {
+                idTopic >= 0 -> {
+                    topicImage.setImageDrawable(
+                        Drawable.createFromPath(
+                            File(
+                                "${requireContext().filesDir.path}/images/topics",
+                                "${topic!!.value!!.title}_${topic!!.value!!.id}.png"
+                            ).path
+                        )
+                    )
+                    head.title = topic!!.value!!.title
+                }
+                idTopic == -1 -> {
+                    head.title = "Избранное"
+                }
+                idTopic == -2 -> {
+                    head.title = "Удалённое"
+                }
+
+            }
+
         }
 
         return binding.root

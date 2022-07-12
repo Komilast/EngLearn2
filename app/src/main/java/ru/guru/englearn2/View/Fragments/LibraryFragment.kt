@@ -17,13 +17,15 @@ import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Activities.EAALActivity
+import ru.guru.englearn2.View.Activities.LessonListActivity
 import ru.guru.englearn2.View.Activities.WordListActivity
 import ru.guru.englearn2.View.Adapters.TopicAdapter
+import ru.guru.englearn2.View.Interfaces.OnClickLibrary
 import ru.guru.englearn2.View.Interfaces.onLessonClickListener
 import ru.guru.englearn2.ViewModel.LibraryVM
 import ru.guru.englearn2.databinding.FragmentLibraryBinding
 
-class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListener {
+class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListener, OnClickLibrary {
 
     private lateinit var binding: FragmentLibraryBinding
     private var viewModel: LibraryVM? = null
@@ -35,7 +37,7 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
         binding = FragmentLibraryBinding.inflate(inflater)
 
         binding.apply {
-            adapter = TopicAdapter(requireContext(), ArrayList(), this@LibraryFragment)
+            adapter = TopicAdapter(requireContext(), ArrayList(), this@LibraryFragment, this@LibraryFragment)
             recycler.adapter = adapter
             recycler.layoutManager = LinearLayoutManager(context)
         }
@@ -60,6 +62,12 @@ class LibraryFragment : Fragment(R.layout.fragment_library), onLessonClickListen
         val intent = Intent(requireContext(), EAALActivity::class.java)
         intent.putExtra("idTopic", idTopic)
         intent.putExtra("idLesson", -1)
+        startActivity(intent)
+    }
+
+    override fun onClickTopic(topic: Topic) {
+        val intent = Intent(requireContext(), LessonListActivity::class.java)
+        intent.putExtra("idTopic", topic.id)
         startActivity(intent)
     }
 

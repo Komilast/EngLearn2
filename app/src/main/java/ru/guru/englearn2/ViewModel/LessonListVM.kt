@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.realm.Realm
 import io.realm.RealmList
+import ru.guru.englearn.database.LiveRealmObject
 import ru.guru.englearn2.Model.Lesson
 import ru.guru.englearn2.Model.Menu
 import ru.guru.englearn2.Model.Topic
@@ -16,6 +17,7 @@ class LessonListVM : ViewModel() {
     private var lessonsFav: LiveData<RealmList<Lesson>>? = null
     private var lessonsDel: LiveData<RealmList<Lesson>>? = null
     private var lessons: LiveData<RealmList<Lesson>>? = null
+    private var topic: LiveRealmObject<Topic>? = null
 
     fun getAllLessons(idTopic: Int): LiveData<RealmList<Lesson>>?{
         return when {
@@ -33,6 +35,12 @@ class LessonListVM : ViewModel() {
             }
             else -> null
         }
+    }
+
+    fun getTopic(idTopic: Int): LiveRealmObject<Topic>?{
+        if (idTopic >= 0)
+            topic = LiveRealmObject(realm.where(Topic::class.java).equalTo("id", idTopic).findFirst()!!)
+        return topic
     }
 
 

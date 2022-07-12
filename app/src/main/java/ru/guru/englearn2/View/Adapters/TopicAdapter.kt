@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.guru.englearn2.Model.Topic
 import ru.guru.englearn2.R
 import ru.guru.englearn2.View.Holders.TopicHolder
+import ru.guru.englearn2.View.Interfaces.OnClickLibrary
 import ru.guru.englearn2.View.Interfaces.onLessonClickListener
 
 class TopicAdapter(
         private val context: Context,
         private var data: ArrayList<Topic>,
-        private val listener: onLessonClickListener)
+        private val listener: onLessonClickListener,
+        private val listener2: OnClickLibrary)
     : RecyclerView.Adapter<TopicHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopicHolder {
             return TopicHolder(LayoutInflater
@@ -22,7 +24,7 @@ class TopicAdapter(
         }
 
         override fun onBindViewHolder(holder: TopicHolder, position: Int) {
-            holder.bind(data[position], context, listener)
+            holder.bind(data[position], context, listener, listener2)
         }
 
         override fun getItemCount(): Int {

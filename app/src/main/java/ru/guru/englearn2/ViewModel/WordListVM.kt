@@ -47,12 +47,12 @@ class WordListVM : ViewModel() {
     }
 
     fun getLesson(idLesson: Int): LiveRealmObject<Lesson>? {
-        if (idLesson >= 0){
-            lesson = LiveRealmObject(realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!)
+        if (idLesson >= 0)
+            lesson = LiveRealmObject(
+                realm.where(Lesson::class.java).equalTo("id", idLesson).findFirst()!!
+            )
             return lesson
-        } else {
-            return null
-        }
+
     }
 
     fun lessonFav(lesson: Lesson){
